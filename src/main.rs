@@ -9,6 +9,9 @@ struct Options {
     #[clap(short = 'd', long = "dead")]
     /// Make the cat appear dead
     dead: bool,
+    #[clap(short = 'f', long = "file")]
+    /// Load the cat picture from the specified file
+    cat_file: Option<std::path::PathBuf>,
 }
 
 fn main() {
@@ -21,9 +24,26 @@ fn main() {
         eprintln!("A cat shouldn't bark like a dog.");
     }
 
-    println!("{}", message.bright_yellow().underline().on_purple());
+    match &options.cat_file {
+        Some(path) => {
+            let cat_template = std::fs::read_to_string(path)
+                .expect(
+                    &format!("could not read file {:?}", path)
+                );
+            println!("{}", message.bright_yellow().underline().on_purple());
+            print_the_cat_from_template(&cat_template, eye);
+        },
+        None => {
+            println!("{}", message.bright_yellow().underline().on_purple());
+            print_the_cat(eye);
+        }
+    }
+}
 
-    print_the_cat(eye);
+fn print_the_cat_from_template(cat_template: &str, eye: &str) {
+    let eye = format!("{}", eye.red().bold());
+    let cat_picture = cat_template.replace("{eye}", &eye);
+    println!("{}", &cat_picture);
 }
 
 fn print_the_cat(eye: &str) {
