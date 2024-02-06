@@ -1,7 +1,18 @@
+use clap::Parser;
+
+#[derive(Parser)]
+struct Options {
+    message: String
+}
+
 fn main() {
-    let message = std::env::args().nth(1)
-        .expect("Missing the message. Usage: cat-say <message>");
+    let options = Options::parse();
+    let message = options.message;
     println!("{}", message);
+    print_the_cat();
+}
+
+fn print_the_cat() {
     println!(" \\");
     println!("  \\");
     println!("     /\\_/\\");
