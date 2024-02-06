@@ -1,4 +1,5 @@
 use clap::Parser;
+use colored::Colorize;
 
 #[derive(Parser)]
 struct Options {
@@ -16,7 +17,11 @@ fn main() {
 
     let eye = if options.dead { "x" } else { "o" };
 
-    println!("{}", message);
+    if message.to_lowercase() == "woof" {
+        eprintln!("A cat shouldn't bark like a dog.");
+    }
+
+    println!("{}", message.bright_yellow().underline().on_purple());
 
     print_the_cat(eye);
 }
@@ -25,6 +30,6 @@ fn print_the_cat(eye: &str) {
     println!(" \\");
     println!("  \\");
     println!("     /\\_/\\");
-    println!("    ( {eye} {eye} )");
+    println!("    ( {eye} {eye} )", eye=eye.red().bold());
     println!("    =( I )=");
 }
