@@ -2,20 +2,29 @@ use clap::Parser;
 
 #[derive(Parser)]
 struct Options {
-    message: String
+    #[clap(default_value = "Meow!")]
+    /// What does the cat say?
+    message: String,
+    #[clap(short = 'd', long = "dead")]
+    /// Make the cat appear dead
+    dead: bool,
 }
 
 fn main() {
     let options = Options::parse();
     let message = options.message;
+
+    let eye = if options.dead { "x" } else { "o" };
+
     println!("{}", message);
-    print_the_cat();
+
+    print_the_cat(eye);
 }
 
-fn print_the_cat() {
+fn print_the_cat(eye: &str) {
     println!(" \\");
     println!("  \\");
     println!("     /\\_/\\");
-    println!("    ( o o )");
+    println!("    ( {eye} {eye} )");
     println!("    =( I )=");
 }
